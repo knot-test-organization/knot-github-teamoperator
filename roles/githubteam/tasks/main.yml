@@ -1,0 +1,54 @@
+---
+- name: set PAT variable
+  set_fact:
+    PAT: "{{ lookup('env','PAT') }}"
+  
+# - name: set parent_team_id variable
+#   set_fact:
+#     parent_team_id: "{{ lookup('env','{{ repo_name | upper }}_PARENT_ID') }}"
+
+# # tasks file for GithubTeam
+# - name: Create a group in the organization
+#   uri:
+#     url: "https://api.github.com/orgs/{{ organization_name }}/teams"
+#     method: POST
+#     headers:
+#       Accept: "application/vnd.github+json"
+#       Authorization: "Bearer {{ PAT }}"
+#     body_format: json
+#     body:
+#       name: "{{ repo_name }}"
+#       description: "{{ description }}"
+#       privacy: "closed"
+#     status_code: 201
+#   register: result
+#   when: parent == "enabled"
+#   ignore_errors: true
+
+# - name: debug
+#   debug:
+#     msg: "{{ result.json }}"
+#   when: parent == "enabled"
+
+# - name: Create a Environment Variable (PARENT_ID)
+#   shell: "export {{ repo_name | upper }}_PARENT_ID='{{ result.json.id }}'"
+#   environment:
+#     PATH: "{{ ansible_env.PATH }}"
+#   when: parent == "enabled"
+#   ignore_errors: true
+# 
+
+- name: Create a team in the organization
+  uri:
+    url: "https://api.github.com/orgs/{{ organization_name }}/teams"
+    method: POST
+    headers:
+      Accept: "application/vnd.github+json"
+      Authorization: "Bearer {{ PAT }}"
+    body_format: json
+    body:
+      name: "{{ repo_name }}"
+      description: "{{ description }}"
+      privacy: "closed"
+    status_code: 201
+  ignore_errors: true

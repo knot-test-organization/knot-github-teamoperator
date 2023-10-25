@@ -1,0 +1,23 @@
+---
+- name: set username variable
+  set_fact:
+    username: "{{ lookup('env','GITHUB_USERNAME') }}"
+
+- name: set PAT variable
+  set_fact:
+    PAT: "{{ lookup('env','PAT') }}"
+
+- name: set team_slug variable
+  set_fact:
+    team_slug: "{{ repo_name | lower | replace(' ', '-') }}"
+
+# tasks file for GithubTeam
+- name: Delete a team in the organization
+  uri:
+    url: "https://api.github.com/orgs/{{ organization_name }}/teams/{{ team_slug }}"
+    method: DELETE
+    headers:
+      Accept: "application/vnd.github+json"
+      Authorization: "Bearer {{ PAT }}"
+    status_code: 204
+  ignore_errors: true

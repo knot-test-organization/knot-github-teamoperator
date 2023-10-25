@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- github.team_v1_githubteam.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples
